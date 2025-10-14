@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  oracle-db:
+    build: .
+    container_name: proyecto_bases
+    environment:
+      - ORACLE_PASSWORD=1234
+      - APP_USER=PBASES
+      - APP_PASSWORD=1234
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+    restart: always
+    networks:
+      - oracle_net
+
+  ngrok:
+    image: wernight/ngrok
+    container_name: oracle_tunnel
+    environment:
+      NGROK_AUTHTOKEN: 2LvQzaVooz3CKLPTejr0WvYjKBg_5Rv8uNDhAjywhKGhuBNJG
+      NGROK_PROTOCOL: tcp
+      NGROK_PORT: oracle-db:1521
+    depends_on:
+      - oracle-db
+    networks:
+      - oracle_net
+
+volumes:
+  oracle_data:
+
+networks:
+  oracle_net:
+    driver: bridge

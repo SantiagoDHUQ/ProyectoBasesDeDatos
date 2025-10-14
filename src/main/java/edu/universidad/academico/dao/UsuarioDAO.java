@@ -12,16 +12,19 @@ public class UsuarioDAO {
         Usuario usuario = null;
 
         String sql = """
-            SELECT u.USUARIO_ID, 
-                   u.NOMBRE_USUARIO, 
-                   u.TIPO_USUARIO,
-                   NVL(e.EST_NOMBRES || ' ' || e.EST_APELLIDOS, 
-                       d.DOCENTE_NOMBRES || ' ' || d.DOCENTE_APELLIDOS) AS NOMBRE_COMPLETO
-            FROM USUARIOS u
+            SELECT 
+                u.USUARIO_ID,
+                u.USUARIO_NOMBRE,
+                u.USUARIO_TIPO,
+                NVL(
+                    e.EST_NOMBRES || ' ' || e.EST_APELLIDOS,
+                    d.DOCENTE_NOMBRES || ' ' || d.DOCENTE_APELLIDOS
+                ) AS NOMBRE_COMPLETO
+            FROM USUARIO u
             LEFT JOIN ESTUDIANTE e ON u.EST_ID = e.EST_ID
             LEFT JOIN DOCENTE d ON u.DOCENTE_ID = d.DOCENTE_ID
-            WHERE UPPER(u.NOMBRE_USUARIO) = UPPER(?) 
-              AND u.CONTRASENA = ?
+            WHERE UPPER(u.USUARIO_NOMBRE) = UPPER(?)
+              AND u.USUARIO_PASSWORD = ?
         """;
 
         try (Connection conn = ConexionBD.getConnection();
@@ -34,15 +37,15 @@ public class UsuarioDAO {
                 if (rs.next()) {
                     usuario = new Usuario(
                             rs.getInt("USUARIO_ID"),
-                            rs.getString("NOMBRE_USUARIO"),
-                            rs.getString("TIPO_USUARIO"),
+                            rs.getString("USUARIO_NOMBRE"),
+                            rs.getString("USUARIO_TIPO"),
                             rs.getString("NOMBRE_COMPLETO")
                     );
                 }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error al validar usuario: " + e.getMessage());
+            System.err.println("❌ Error al validar usuario: " + e.getMessage());
             e.printStackTrace();
         }
 
