@@ -1,7 +1,0 @@
-
-<?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?><?import javafx.scene.control.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="edu.universidad.academico.controller.DashboardController" prefWidth="800" prefHeight="600">
-    <top><ToolBar><Label text="Dashboard - Proyecto Bases de Datos"/></ToolBar></top>
-    <center><Label text="Contenido del dashboard (placeholder)"/></center>
-</BorderPane>
